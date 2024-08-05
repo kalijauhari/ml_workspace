@@ -1,0 +1,37 @@
+{
+  "Comment": "A description of my state machine",
+  "StartAt": "Image_Serialization",
+  "States": {
+    "Image_Serialization": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:us-east-1:166075758371:function:serializeImageData"
+      },
+      "Next": "Image_Classification"
+    },
+    "Image_Classification": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:us-east-1:166075758371:function:imageclassification"
+      },
+      "Next": "Filtering_low_confidence",
+      "OutputPath": "$.Payload",
+      "InputPath": "$.Payload.body"
+    },
+    "Filtering_low_confidence": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:us-east-1:166075758371:function:FilterLowConfidenceInferences"
+      },
+      "End": true,
+      "InputPath": "$.body"
+    }
+  }
+}
