@@ -1,7 +1,7 @@
 import json
 import sagemaker
 import base64
-from sagemaker.serializers import IdentitySerializer
+from sagemaker.serializers import IdentitySerializer 
 
 # Fill this in with the name of your deployed model
 ENDPOINT = "image-classification-2024-08-05-16-36-52-899"
